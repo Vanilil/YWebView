@@ -94,7 +94,7 @@
 
     // TODO: addCookieInScriptWithController should not put all cookies of all domains into the javascript
     // BUT we don't know the correct domain unless the request has been loaded, what should we do?
-    //[YWebView addCookieInScriptWithController:controller];
+    [YWebView addCookieInScriptWithController:controller];
     
     [YWebView addCookieOutScriptWithController:controller handler:handler]; // will add Y_HANDLER_NAME here
 
