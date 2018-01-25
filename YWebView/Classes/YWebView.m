@@ -123,45 +123,7 @@
 
 - (WKNavigation*)loadRequest:(NSURLRequest*)originalRequest
 {
-    NSString *validDomain = originalRequest.URL.host;
-
-    if (validDomain.length <= 0) {
-        // hasSuffix requires non-nil string
-        return [super loadRequest:originalRequest];
-    } 
-
-    NSMutableURLRequest *request = [originalRequest mutableCopy];
-
-    const BOOL requestIsSecure = [request.URL.scheme isEqualToString:@"https"];
-
-    NSMutableArray *array = [NSMutableArray array];
-    for (NSHTTPCookie *cookie in [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies]) {
-        // Don't even bother with values containing a `'`
-        if ([cookie.name rangeOfString:@"'"].location != NSNotFound) {
-            //NSLog(@"Skipping %@ because it contains a '", cookie.properties);
-            continue;
-        }
-
-        // Is the cookie for current domain?
-        if (![validDomain hasSuffix:cookie.domain] && ![cookie.domain hasSuffix:validDomain]) {
-            //NSLog(@"Skipping %@ (because not %@)", cookie.properties, validDomain);
-            continue;
-        }
-
-        // Are we secure only?
-        if (cookie.secure && !requestIsSecure) {
-            //NSLog(@"Skipping %@ (because %@ not secure)", cookie.properties, request.URL.absoluteString);
-            continue;
-        }
-
-        NSString *value = [NSString stringWithFormat:@"%@=%@", cookie.name, cookie.value];
-        [array addObject:value];
-    }
-
-    NSString *header = [array componentsJoinedByString:@";"];
-    [request setValue:header forHTTPHeaderField:@"Cookie"];
-
-    return [super loadRequest:request];
+    return [super loadRequest:originalRequest];
 }
 
 #pragma mark - private
